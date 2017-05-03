@@ -1,0 +1,651 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<head lang="en">
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>Nany - Creative Multi-Purpose WordPress Theme</title>
+    <!-- Framework CSS -->
+    <link rel="stylesheet" href="assets/blueprint-css/screen.css" type="text/css" media="screen, projection">
+    <link rel="stylesheet" href="assets/blueprint-css/print.css" type="text/css" media="print">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript" src="assets/scripts/jquery.js"></script>
+    <script type="text/javascript" src="assets/scripts/jquery-ui.custom.min.js"></script>
+
+    <script type="text/javascript" src="assets/scripts/shCore.js"></script>
+    <script type="text/javascript" src="assets/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript" src="assets/scripts/shBrushCss.js"></script>
+    <script type="text/javascript" src="assets/scripts/shBrushPhp.js"></script>
+    <script type="text/javascript" src="assets/scripts/shBrushXml.js"></script>
+    <link type="text/css" rel="stylesheet" href="assets/blueprint-css/shCoreDefault.css" />
+
+    <!--[if lt IE 8]><link rel="stylesheet" href="assets/blueprint-css/ie.css" type="text/css" media="screen, projection"><![endif]-->
+    <link rel="stylesheet" href="assets/blueprint-css/plugins/fancy-type/screen.css" type="text/css" media="screen, projection">
+    <script type="text/javascript">
+        SyntaxHighlighter.all();
+    </script>
+    <script type="text/javascript">
+        (function ($) {
+            $(document).ready(function () {
+                // Cache selectors
+                var lastId,
+                    topMenu = $(".menu .alpha"),
+                    topMenuHeight = topMenu.outerHeight() + 15,
+                    // All list items
+                    menuItems = topMenu.find("a"),
+                    canUpdateURL = typeof history.pushState === "function" ? true : false,
+                    // Anchors corresponding to menu items
+                    scrollItems = menuItems.map(function () {
+                        var item = $($(this).attr("href"));
+                        if (item.length) {
+                            return item;
+                        }
+                    });
+
+                // Bind click handler to menu items
+                // so we can get a fancy scroll animation
+                menuItems.click(function (e) {
+                    var href = $(this).attr("href"),
+                        offsetTop = $(href).offset().top - topMenuHeight + 1;
+
+                    $('html, body').stop().animate({
+                        scrollTop: offsetTop
+                    }, 300);
+                    e.preventDefault();
+                });
+
+                // Bind to scroll
+                $(window).scroll(function () {
+                    // Get container scroll position
+                    var fromTop = $(this).scrollTop() + topMenuHeight;
+
+                    // Get id of current scroll item
+                    var cur = scrollItems.map(function () {
+                        if ($(this).offset().top < fromTop)
+                            return this;
+                    });
+                    // Get the id of the current element
+                    cur = cur[cur.length - 1];
+                    var id = cur && cur.length ? cur[0].id : "";
+
+                    if (lastId !== id) {
+                        lastId = id;
+                        // Set/remove active class
+                        menuItems
+                            .parents('li').removeClass("active").end()
+                            .filter("[href=#" + id + "]").parent('li').addClass("active")
+                            .parents('li').addClass('active');
+
+                        if (canUpdateURL) {
+                            history.pushState(null, null, window.location.href.split('#').shift() + '#' + id);
+                        } else {
+                            var $section = $('#' + id);
+
+                            $section.attr('id', '');
+                            window.location.hash = '#' + id;
+                            $section.attr('id', id);
+                        }
+                    }
+                });
+
+                hashname = window.location.hash.replace('#', '');
+
+                $('.menu li').removeClass('active');
+                $('.menu li a[href=#' + hashname + ']')
+                    .parent('li').addClass('active')
+                    .parents('li').addClass('active');
+
+                elem = $('#' + hashname);
+
+                if (hashname.length > 1) {
+                    $('body, html').animate({
+                        scrollTop: $(elem).offset().top - topMenuHeight - 315
+                    }, 500, 'easeInOutCubic');
+                };
+            })
+        })(jQuery);
+    </script>
+</head>
+
+
+<body>
+    <div class="docs-header-bg">
+        <div class="docs-header">
+
+            <div class="logo">
+                <img src="assets/images/logo.png" alt="Nany logo">
+            </div>
+
+            <h1 class="center">Nany Documentation</h1>
+
+            <p>A Complete Guide of Nany Multi-Purpose WordPress Theme - Document Version 1.0</p>
+            <div>
+                <a href="http://defatch-demo.com/docs/nany/quick-install/" target="_blank" class="header-button">Quick Install</a>
+                <a href="http://themeforest.net/user/defatch#contact" target="_blank" class="header-button">Support</a>
+                <a href="http://themeforest.net/item/nany-creative-multipurpose-wordpress-theme/10169870" target="_blank" class="header-button">Item Page</a>
+                <a href="http://defatch-demo.com/themes/nany" target="_blank" class="header-button">Live Demo</a>
+                <a href="https://www.youtube.com/watch?v=dkrwRKS6w8o" target="_blank" class="header-button">Video Tuts</a>
+            </div>
+
+        </div>
+    </div>
+    <div class="container">
+
+        <!--      Section       -->
+
+        <!-- 		<h2 id="toc" class="alt">Table of Contents</h2> -->
+
+        <div class="menu">
+            <ol class="alpha">
+                <li><a href="#information">General Info</a>
+                    <ol>
+                        <li><a href="#folder-struc">Folder Structure</a></li>
+                        <li><a href="#install-wordpress">Install Nany</a></li>
+                    </ol>
+                </li>
+                <li><a href="#header">Header</a></li>
+                <li><a href="#post-types">Post Types</a>
+                    <ol>
+                        <li><a href="#posts">Posts</a></li>
+                        <li><a href="#pages">Pages</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#products">Products</a></li>
+                    </ol>
+                </li>
+
+                <li><a href="#appearance">Appearance</a>
+                    <ol>
+                        <li><a href="#widgets">Widgets</a></li>
+                        <li><a href="#menus">Menus</a></li>
+                        <li><a href="#options-backup">Options Backup</a></li>
+                        <li><a href="#theme-options">Theme Options</a>
+                            <ol>
+                                <li><a href="#general">General</a></li>
+                                <li><a href="#theme-header">Header</a></li>
+                                <li><a href="#color-options">Color Options</a></li>
+                                <li><a href="#typography">Typography</a></li>
+                                <li><a href="#portfolio-options">Portfolio</a></li>
+                                <li><a href="#blog">Blog</a></li>
+                                <li><a href="#woocommerce">WooCommerce</a></li>
+                                <li><a href="#footer">Footer</a></li>
+                                <li><a href="#404-page">404 Page</a></li>
+                                <li><a href="#custom-css">Custom CSS</a></li>
+                                <li><a href="#custom-sidebar">Custom Sidebars</a></li>
+                                <li><a href="#to-shortcode">Shortcodes</a></li>
+                                <li><a href="#shortcode-referance">Shortcodes Ref</a></li>
+                            </ol>
+                        </li>
+                    </ol>
+                </li>
+
+                <li><a href="#shortcodes">Shortcodes</a></li>
+                <li><a href="#tricks">Tricks</a>
+                    <ol>
+                        <li><a href="#row">Row</a></li>
+                        <li><a href="#column">Column</a></li>
+                        <li><a href="#contact-form-7">Contact Form 7</a></li>
+                        <li><a href="#animation">Animation</a></li>
+                    </ol>
+                </li>
+                <li><a href="#credits">Credits</a></li>
+
+            </ol>
+        </div>
+
+
+        <h3 id="information"><strong>General Informations</strong> - <a href="#information">top</a></h3>
+
+        <p>First of all, we want to say <strong>thanks you!</strong> We are very grateful that you have chosen our theme for your website. We will do everything we can to provide you the best support possible. Feel free asking us if you need more help.</p>
+
+        <p>This document covers the Nany structure, set up, and use of this theme and provides answers and solutions to common problems and issues - we encourage you to read this document thoroughly if you are experiencing any difficulties. If you have any questions that are beyond the scope of this document, feel free to ask support. (<a href="http://themeforest.net/user/defatch#contact" target="_blank">Support</a>)</p>
+
+
+        <hr>
+
+        <div class="subitems">
+
+            <h5 id="folder-struc"><strong>Folder Structure</strong> - <a href="#information">top</a></h5>
+            <img src="assets/images/folder-structure.png" alt="Folder Structure" width="1012" height="322">
+            <ul class="folder-struc">
+                <li class="file folder">Demo Data</li>
+                <ul>
+                    <li class="file folder">Sliders</li>
+                    <li class="file page">theme-options.txt</li>
+                    <li class="file page">Nany-wp.xml</li>
+                </ul>
+                <li class="file folder">Documentation</li>
+                <li class="file folder">Licensing</li>
+                <li class="file folder">PSD</li>
+                <li class="file zipped">nany.zip</li>
+                <li class="file zipped">nany-child.zip</li>
+            </ul>
+
+            <hr>
+
+            <h5 id="install-wordpress"><strong>How to install Nany WordPress theme?</strong> - <a href="#information">top</a></h5>
+            <a href="http://defatch-demo.com/docs/nany/quick-install/" target="_blank"><img src="assets/images/quick-install.jpg" alt="Quick Install"></a>
+            <br><br>
+            <iframe width="100%" height="550" src="http://www.youtube.com/embed/dkrwRKS6w8o" frameborder="0" allowfullscreen></iframe>
+
+            <hr>
+
+            <!--      Section       -->
+
+
+            <h3 id="header"><strong>How To Use Header in Nany WordPress Theme?</strong> - <a href="#information">top</a></h3>
+            <p>Our theme in-builts with simple header options. That's are a default title area, slider and no titles.</p>
+
+            <h5 id="header-types">Header Types</h5>
+            <p>Nany Allows 3 types of header. They Are : </p>
+            <ol>
+                <li>Title</li>
+                <li>Slider</li>
+                <li>No Title</li>
+            </ol>
+
+            <span class="line-sep"></span>
+
+            <h6>1. Title</h6>
+            <p>This only allows as a page title and breadcrumbs. In all other pages having this type as a default.</p>
+            <p><strong>Example : </strong> <a href="http://www.defatch-demo.com/themes/nany/blog/" target="_blank">Blog Page</a></p>
+
+            <span class="line-sep"></span>
+
+            <h6>2. Slider</h6>
+            <p>This header type allows you to make a slider text-field on <strong>Page Options</strong> Meta-Box.</p>
+            <p class="alert alert-warning">Note : When you select <strong>Slider</strong> in <strong>Header Types</strong> Then you get Extra text-field on <strong>Page Options</strong></p>
+            <img src="assets/images/slider-slug.png" alt="Rev Slider">
+            <p><strong>Example : </strong> <a href="http://www.defatch-demo.com/themes/nany/" target="_blank">Home Page</a></p>
+
+            <span class="line-sep"></span>
+
+            <h6>3. No Title</h6>
+            <p>This header type is hide your page title bar and that breadcrumbs.</p>
+
+            <hr>
+
+            <h3 id="post-types"><strong>Post Types</strong> - <a href="#information">top</a></h3>
+            <p>In Nany have a <strong>Posts, Pages, Testimonials, Portfolio</strong></p>
+
+            <h6 id="posts">1. Posts</h6>
+            <p>In Nany theme have 8 types of post formats</p>
+            <ol>
+                <li>Standard</li>
+                <li>Image</li>
+                <li>Gallery</li>
+                <li>Link</li>
+                <li>Status</li>
+                <li>Quote</li>
+                <li>Video</li>
+                <li>Audio</li>
+            </ol>
+            <p class="alert alert-info">If you select different post formats then you can get that format related options under content editor.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="pages">2. Pages</h6>
+            <p>Pages is all about <strong>Page Templates</strong> : </p>
+            <ol>
+                <li>Default Template</li>
+                <li>100% Width</li>
+                <li>Blog</li>
+                <li>Full Width Page</li>
+                <li>Left Sidebar</li>
+                <li>Portfolio</li>
+                <li>Shop Full-Width</li>
+                <li>Shop Left Sidebar</li>
+                <li>Shop Right Sidebar</li>
+                <li>Under Construction</li>
+            </ol>
+            <p>
+                <strong>Default Template : </strong> It's a WordPress default template. It's about <strong>Right Sidebar</strong>. <br>
+                <strong>100% Width : </strong>In Nany demo pages are created from 100% Width template. This makes your layout as a 100% width(based on screen size). <br>
+                <strong>Blog : </strong>If you select this page you can get separate meta boxes. That have plenty of options about blog page. For archive, category and tag pages options from <strong>Appearance > Theme Options > Blog</strong> <a href="#blog">Click here</a>. <br>
+                <strong>Full Width Page : </strong>This is simply about full width. That means 1170px.<br>
+                <strong>Left Sidebar : </strong>This is simply about left sidebar.<br>
+                <strong>Portfolio : </strong>If you select this page you can get separate meta boxes. That have plenty of options about portfolio page. For archive, category and tag pages options from <strong>Appearance > Theme Options > Portfolio</strong> <a href="#portfolio">Click here</a>. <br>
+                <strong>Shop Pages : </strong>If you select this page you can get separate meta boxes. That have plenty of options about shops page. For archive, category and tag pages options from <strong>Appearance > Theme Options > WooCommerce</strong> <a href="#woocommerce">Click here</a>. <br>
+                <strong>Under Construction : </strong>This template have a time counter, background image, logo image and some simple content, That's All. <br>
+            </p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="testimonials">3. Testimonials</h6>
+            <p>Testimonials have a Title(Client Name), Client Profession, Client Image, Testimonial Content.</p>
+            <p class="alert alert-info">You can get these details via shortcode called <strong>Testimonial Slider</strong>. Shortcode element like below.</p>
+            <p><img src="assets/images/testimonial.jpg" alt="Testimonial Slider"></p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="portfolio">4. Portfolio</h6>
+            <p>Portfolio have three type of layout styles.</p>
+            <ol>
+                <li>Own Styling</li>
+                <li>Left Image</li>
+                <li>Full Width Image</li>
+            </ol>
+            <p><img src="assets/images/portfolio-options.jpg" alt="Portfolio Options"></p>
+            <p><strong>Own Styling </strong> is about your content editor. You can use own styling if you want minimal like other themes. <br>
+                <strong>Left Image </strong> if you select this type then you get other options about <strong>Date, Skills, Disable Category List, Add Portfolio Item(Images)</strong>. <br>
+                <strong>Full Width Image </strong> this layout type is mostly related to Left Image. But portfolio image will show full width.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="products">5. Products</h6>
+            <p>If you install <a href="https://wordpress.org/plugins/woocommerce" target="_blank">WooCommerce</a> Plugin then you can get. Products in WP sidebar menu.</p>
+            <p>If you have any doubts about WooCommerce plugin please go through following link documentations : </p>
+            <ol>
+                <li><a href="http://docs.woothemes.com/documentation/plugins/woocommerce/" target="_blank">WooCommerce Documentation</a></li>
+                <li><a href="http://docs.woothemes.com/document/managing-products/" target="_blank">Adding and managing products</a></li>
+            </ol>
+
+            <hr>
+
+            <h3 id="widgets"><strong>Widgets</strong> - <a href="#information">top</a></h3>
+            <p>Nany have some own widgets apart from default widgets of WordPress. That's all are listed below in this image. You can get WooCommerce widgets after installing that plugin.</p>
+            <p><img src="assets/images/widgets.png" alt="Widgets"></p>
+
+            <hr>
+
+            <h3 id="menus"><strong>Menus</strong> - <a href="#information">top</a></h3>
+            <p>Nany allows 6 theme locations.</p>
+            <ol>
+                <li>Main Menu</li>
+                <li>One Page Menu</li>
+                <li>Footer Menu</li>
+            </ol>
+            <p>You can select different menus in different pages using <strong>Choose Menu</strong> metabox in pages.</p>
+            <p><img src="assets/images/custom-menu.png" alt="Custom Menu"></p>
+
+            <hr>
+
+            <h3 id="options-backup"><strong>Options Backup</strong> - <a href="#information">top</a></h3>
+            <p>This option is allows you to Import or Export theme options. <br>
+                In this theme package <strong>Demo Data</strong> folder you can get <strong>theme-options.txt</strong></p>
+
+            <h3 id="theme-options"><strong>Theme Options</strong> - <a href="#information">top</a></h3>
+            <p>Most of global settings in Nany Theme having in <strong>Appearance > Theme Options</strong>. <br> Theme Options have : </p>
+
+            <ol>
+                <li>General</li>
+                <li>Header</li>
+                <li>Color Options</li>
+                <li>Typography</li>
+                <li>Portfolio</li>
+                <li>Blog</li>
+                <li>WooCommerce</li>
+                <li>Footer</li>
+                <li>404 Page</li>
+                <li>Custom CSS</li>
+                <li>Custom Sidebars</li>
+                <li>Shortcodes</li>
+                <li>Shortcode Reference</li>
+            </ol>
+
+            <h6 id="general">1. General</h6>
+            <p>In General Options you can get accessibility about : </p>
+            <ul>
+                <li>Meta Keywords for your site</li>
+                <li>Meta description for your site</li>
+                <li>Responsive layout (Enable or Disable Responsive)</li>
+                <li>Enable page comments (Enable or Disable Page Comments)</li>
+                <li>Custom favicon (Default fav icon)</li>
+                <li>Apple iPhone icon (Apple bookmark icon)</li>
+                <li>Apple iPhone retina icon (Apple bookmark icon)</li>
+                <li>Apple iPad icon (Apple bookmark icon)</li>
+                <li>Apple iPad retina icon (Apple bookmark icon)</li>
+                <li>Custom WP admin login logo (WordPress Login Logo)</li>
+                <li>Analytics code (You can paste analytic code here)</li>
+            </ul>
+            <br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="theme-header">2. Header</h6>
+            <p>In Header Options you can get accessibility about : </p>
+            <ul>
+                <li>Logo upload</li>
+                <li>Retina logo upload (This logo should be 2x size from normal logo)</li>
+                <li>Title area background (This image will be in all page title area)</li>
+                <li>Title area Nub (Read that description)</li>
+                <li>Breadcrumbs BG Color</li>
+                <li>Parallax Overlay (Enable or Disable Parallax)</li>
+                <li>Breadcrumbs (Enable or Disable Breadcrumbs)</li>
+                <li>Sticky Navigation (Enable or Disable Sticky)</li>
+                <li>Search (This icon is from menu area)</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="color-options">3. Color Options</h6>
+            <p>In Color Options you can get accessibility about : </p>
+            <ul>
+                <li>Primary Color (Main Color of Nany theme)</li>
+                <li>Menu Text</li>
+                <li>Heading Text color (Content Area)</li>
+                <li>Sidebar Heading Color</li>
+                <li>Footer heading color</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="typography">4. Typography</h6>
+            <p>In Typography Options you can get accessibility about 350+ Google Fonts : </p>
+            <ul>
+                <li>Body font</li>
+                <li>Menu font</li>
+                <li>Page title font</li>
+                <li>Heading font</li>
+                <li>Custom font</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="portfolio-options">5. Portfolio</h6>
+            <p>In Portfolio Options you can get accessibility about : </p>
+            <ul>
+                <li>Portfolio Name</li>
+                <li>Portfolio Slug</li>
+                <li>Select portfolio columns</li>
+                <li>Category Filter</li>
+                <li>Order</li>
+                <li>Orderby</li>
+                <li>Show only certain categories</li>
+                <li>Offset</li>
+                <li>Disable Pagination</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="blog">6. Blog</h6>
+            <p>In Blog Options you can get accessibility about : </p>
+            <ul>
+                <li>Full width blog</li>
+                <li>Sidebar Position</li>
+                <li>Exclude categories from blog page</li>
+                <li>Excerpt length</li>
+                <li>Check items you want to hide from meta</li>
+                <li>Read More button text</li>
+                <li>Author info</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="woocommerce">7. WooCommerce</h6>
+            <p>In WooCommerce you can get accessibility about : </p>
+            <ul>
+                <li>Layout style</li>
+                <li>Exclude Category</li>
+                <li>Disable related products in single page?</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="footer">8. Footer</h6>
+            <p>In Footer Options you can get accessibility about : </p>
+            <ul>
+                <li>Copyright bar (Enable or Disable Copyright bar)</li>
+                <li>Copyright area text</li>
+                <li>Footer widgets (Enable or Disable Footer widgets)</li>
+                <li>Widgets Scroll Effect (Animation from <a href="http://daneden.github.io/animate.css/" target="_blank">animate.css</a>)</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="404-page">9. 404 Page</h6>
+            <p>In 404 Page you can get accessibility about : </p>
+            <ul>
+                <li>404 Heading</li>
+                <li>404 Sub-Heading</li>
+                <li>Button Text</li>
+                <li>Background Image</li>
+                <li>All Content Color</li>
+            </ul><br>
+
+            <span class="line-sep"></span>
+
+            <h6 id="custom-css">10. Custom CSS</h6>
+            <p>You can write code for your custom CSS.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="custom-sidebar">11. Custom Sidebars</h6>
+            <p>You can create unlimited sidebars here. (Read that descriptions).</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="to-shortcode">12. Shortcodes</h6>
+            <p>This shortcode lists are only for <strong>Process</strong> & <strong>Timeline</strong> shortcodes.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="shortcode-referance">12. Shortcodes Reference</h6>
+            <p>All custom shortcodes are listed here. You can use them for your content styling.</p>
+
+            <hr>
+
+            <h3 id="shortcodes"><strong>Shortcodes</strong> - <a href="#information">top</a></h3>
+            <p>Nany theme have 88 shortcodes, including Visual Composer default shortcodes & WooCommerce Shortcodes.</p>
+            <img src="assets/images/shortcodes.png" alt="Nany Shortcodes">
+
+            <p class="alert alert-info">Shortcodes have <strong>Design</strong> tab you can edit them like font size and color there.</p>
+
+            <hr>
+
+            <h3 id="tricks"><strong>Tricks</strong> - <a href="#information">top</a></h3>
+            <p>Nany theme have some tips and tricks for you to make even better from live demo.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="row">1. Row</h6>
+            <p>Row is most needed shortcode for Nany Theme. So, please read carefully in coming explanations.</p>
+            <img src="assets/images/row-settings.png" alt="Row Settings"> <br><br>
+            <p><strong>General : </strong> Extra Class Name, Row ID(Menu Usage), Center Row Content(If you use 100% Width Page Template you should check this). Remove Right & Left spaces is removing each element spaces. Sections nubs is about nany theme design. You can create your own nub and upload it here by selecting <strong>Custom Nub</strong>.<br>
+                <strong>Design : </strong> Visibility, Text Color. <br>
+                <strong>Background : </strong> Background Color, Background Image Style, Enable Parallax, Need Background Overlay, Background Image. <br>
+                <strong>Video : </strong> Enable Video Background. <br>
+                <strong>Border : </strong> Border Style, Border Color, Border Width. <br>
+                <strong>Margin : </strong> Top, Bottom. Right, Left. <br>
+                <strong>Padding : </strong> Top, Bottom. Right, Left.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="column">2. Column</h6>
+            <p>Column have some extra option to make even better.</p>
+            <img src="assets/images/column.jpg" alt="Column Settings"> <br><br>
+            <p><strong>General : </strong> Extra Class Name. <br>
+                <strong>Width & Responsive : </strong> Width, Responsiveness. <br>
+                <strong>Animation : </strong> Animation Style, All animations from <a href="http://daneden.github.io/animate.css/" target="_blank">Animate.css</a>. <br>
+                <strong>Border : </strong> Border Style, Border Color, Border Width. <br>
+                <strong>Margin : </strong> Top, Bottom. Right, Left. <br>
+                <strong>Padding : </strong> Top, Bottom. Right, Left.</p>
+
+            <span class="line-sep"></span>
+
+            <h6 id="contact-form-7">3. Contact Form 7</h6>
+            <p class="alert alert-success">Use this class <strong>form-one</strong> on column extra class field for if you need like this form style <a href="http://www.defatch-demo.com/themes/nany/contact-us" target="_blank">click here</a>.</p>
+            <p>Normal Contact Form :</p>
+            <p>
+                [text* your-name placeholder "Name"] <br>
+                [email* your-email placeholder "Email"] <br>
+                [textarea your-message placeholder "Message"] <br>
+                [submit "Submit"]
+            </p>
+
+            <hr>
+
+            <h3 id="animation"><strong>How To Use Animation in Our WordPress Theme?</strong> - <a href="#information">top</a></h3>
+
+            <iframe width="100%" height="550" src="http://www.youtube.com/embed/fGHZqKIjkFg" frameborder="0" allowfullscreen></iframe>
+
+            <br><br>
+            <hr>
+
+            <!-- Section -->
+
+            <h5 id="changelog"><strong>Change Log</strong> - <a href="#information">top</a></h5>
+
+            <pre class="brush: html;">
+                Nany - Creative Multi-Purpose WordPress Theme
+                ----------------------------------------------------
+
+                30/01/2015 - Version 1.0
+                - RELEASE
+    		</pre>
+
+            <hr>
+
+            <!-- Credits -->
+            <h5 id="credits"><strong>Sources and Credits</strong> - <a href="#information">top</a></h5>
+
+           <div class="narrow-p">
+
+            <b>I've used the following plugins as listed.</b>
+
+            <ul>
+                <li><a href="https://github.com/bfintal/Counter-Up">Counter-Up</a></li>
+                <li><a href="http://fitvidsjs.com/">fitvidsjs</a></li>
+                <li><a href="https://github.com/pupunzi/jquery.mb.YTPlayer">jquery.mb.YTPlayer</a></li>
+                <li><a href="http://markdalgleish.com/projects/stellar.js/">jquery.stellar</a></li>
+                <li><a href="http://stickyjs.com/">jquery.sticky</a></li>
+                <li><a href="https://github.com/mattbryson/TouchSwipe-Jquery-Plugin">jquery.touchSwipe.min</a></li>
+                <li><a href="http://modernizr.com/download/">modernizr.custom</a></li>
+                <li><a href="http://mynameismatthieu.com/WOW/docs.html">wow.min</a></li>
+                <li><a href="http://owlgraphic.com/owlcarousel/">OwlCarousel</a></li>
+                <li><a href="http://isotope.metafizzy.co/">Isotope</a></li>
+                <li><a href="http://dimsemenov.com/plugins/magnific-popup/">Magnific Popup</a></li>
+                <li><a href="http://imakewebthings.com/jquery-waypoints/">Waypoints</a></li>
+            </ul>
+
+        <hr class="space">
+
+        <p><strong>Images :</strong></p>
+
+        <ul>
+          <li><a href="http://dribbble.com/">Dribbble : All screenshots &copy; their respective owners.</a></li>
+          <li><a href="http://unsplash.com/">Unsplash</a></li>
+        </ul>
+
+        <hr class="space">
+
+        <p>All images have been used for demonstration purposes only and are not included in this theme package.</p>
+
+        <hr class="space">
+
+        <!-- Credits -->
+
+        <p>Once again, thank you so much for purchasing this theme. As I said at the beginning, I'd be glad to help you if you have any questions relating this theme. If you have any suggestions on how to improve our themes or documentation please share them!</p>
+
+        <p><strong>Need Support</strong> <a href="http://themeforest.net/user/Defatch#contact" target="_blank">Click Here</a>.</p>
+
+        <hr class="space">
+
+        </div>
+
+
+    </div>
+    <!-- end div .container -->
+
+</body>
+
+</html>
